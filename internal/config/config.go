@@ -10,8 +10,20 @@ type LogConfig struct {
 	Level string
 }
 
+type DBConfig struct {
+	Host     string
+	Port     int
+	User     string
+	Password string
+	Name     string
+	SSLMode  string
+	MaxConns int32
+	MinConns int32
+}
+
 type Config struct {
 	Log LogConfig
+	DB     DBConfig
 }
 
 // Load loads configuration from config/config.yaml, allowing environment variables to override values.

@@ -1,3 +1,11 @@
 log:
   level: info
-  
+db:
+  host: localhost
+  port: 5432
+  user: library
+  password: secret
+  name: library
+  sslmode: disable
+  max_conns: 10
+  min_conns: 1

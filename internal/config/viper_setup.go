@@ -25,6 +25,16 @@ func setupViperConfig() *viper.Viper {
 func setDefaultValues(viperInstance *viper.Viper) {
 	// Log defaults
 	viperInstance.SetDefault("log.level", "info")
+
+	// Database defaults
+	viperInstance.SetDefault("db.host", "localhost")
+	viperInstance.SetDefault("db.port", 5432)
+	viperInstance.SetDefault("db.user", "library")
+	viperInstance.SetDefault("db.password", "secret")
+	viperInstance.SetDefault("db.name", "library")
+	viperInstance.SetDefault("db.sslmode", "disable")
+	viperInstance.SetDefault("db.max_conns", 10)
+	viperInstance.SetDefault("db.min_conns", 1)
 }
 
 // setupEnvironmentOverrides configures Viper to read from environment variables.
