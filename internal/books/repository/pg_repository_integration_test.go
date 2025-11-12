@@ -40,6 +40,7 @@ func setupTestDB(t *testing.T) (repository *pgRepository, cleanup func()) {
 	port, err := pgContainer.MappedPort(ctx, "5432/tcp")
 	require.NoError(t, err)
 
+	db.MigrationDir = "../../../migrations"
 	pool, err := db.ConnectAndMigrate(ctx, host, port.Int(), "library", "secret", "library", "disable", 5, 1)
 	require.NoError(t, err)
 

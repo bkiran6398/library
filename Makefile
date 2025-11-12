@@ -8,6 +8,9 @@ build:
 run:
 	go run ./cmd/library-http
 
+test:
+	go test ./... -v
+
 up:
 	docker compose up -d --build
 

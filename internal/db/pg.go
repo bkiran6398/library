@@ -19,6 +19,10 @@ const (
 	maxRetryAttempts   = 10
 )
 
+var (
+	MigrationDir = "migrations"
+)
+
 // buildConnectionString constructs a PostgreSQL connection string (DSN).
 func buildConnectionString(host string, port int, user, password, databaseName, sslMode string) string {
 	return fmt.Sprintf("postgresql://%s:%s@%s:%d/%s?sslmode=%s", user, password, host, port, databaseName, sslMode)
@@ -106,7 +110,7 @@ func runMigrations(ctx context.Context, connectionString string) error {
 	}
 	defer standardDB.Close()
 
-	if err := goose.UpContext(ctx, standardDB, "migrations"); err != nil {
+	if err := goose.UpContext(ctx, standardDB, MigrationDir); err != nil {
 		return fmt.Errorf("run migrations: %w", err)
 	}
 
