@@ -9,3 +9,6 @@ db:
   sslmode: disable
   max_conns: 10
   min_conns: 1
+server:
+  port: 8080
+  cors_allowed_origins: ["*"]

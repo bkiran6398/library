@@ -35,6 +35,10 @@ func setDefaultValues(viperInstance *viper.Viper) {
 	viperInstance.SetDefault("db.sslmode", "disable")
 	viperInstance.SetDefault("db.max_conns", 10)
 	viperInstance.SetDefault("db.min_conns", 1)
+
+	// Server defaults
+	viperInstance.SetDefault("server.port", 8080)
+	viperInstance.SetDefault("server.cors_allowed_origins", []string{"*"})
 }
 
 // setupEnvironmentOverrides configures Viper to read from environment variables.

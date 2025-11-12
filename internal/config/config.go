@@ -21,9 +21,15 @@ type DBConfig struct {
 	MinConns int32  `mapstructure:"min_conns"`
 }
 
+type ServerConfig struct {
+	Port               int
+	CORSAllowedOrigins []string `mapstructure:"cors_allowed_origins"`
+}
+
 type Config struct {
-	Log LogConfig
-	DB  DBConfig
+	Log    LogConfig
+	DB     DBConfig
+	Server ServerConfig
 }
 
 // Load loads configuration from config/config.yaml, allowing environment variables to override values.
