@@ -4,8 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	bookRepository "github.com/bkiran6398/library/internal/books/repository"
-	bookService "github.com/bkiran6398/library/internal/books/service"
+	bookhttp "github.com/bkiran6398/library/internal/books/http"
+	bookrepo "github.com/bkiran6398/library/internal/books/repository"
+	booksvc "github.com/bkiran6398/library/internal/books/service"
 	"github.com/bkiran6398/library/internal/config"
 	"github.com/bkiran6398/library/internal/db"
 	"github.com/bkiran6398/library/internal/logger"
@@ -30,9 +31,8 @@ func main() {
 	}
 	defer databasePool.Close()
 
-	bookRepo := bookRepository.NewPgRepository(databasePool)
-	bookSvc := bookService.NewService(bookRepo)
-	_ = bookSvc
+	bookHandler := initializeBookHandler(databasePool)
+	_ = bookHandler
 }
 
 // initializeDatabase connects to the database and runs migrations.
@@ -53,4 +53,11 @@ func initializeDatabase(ctx context.Context, loggerInstance zerolog.Logger, dbCo
 	}
 	loggerInstance.Info().Msg("database connected and migrations completed")
 	return databasePool, nil
+}
+
+// initializeBookHandler creates and wires up the book handler with its dependencies.
+func initializeBookHandler(databasePool *db.Pool) bookhttp.Handler {
+	bookRepo := bookrepo.NewPgRepository(databasePool)
+	bookSvc := booksvc.NewService(bookRepo)
+	return bookhttp.NewHandler(bookSvc)
 }

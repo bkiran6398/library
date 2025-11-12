@@ -5,6 +5,7 @@ go 1.24.2
 require (
 	github.com/go-playground/validator/v10 v10.28.0
 	github.com/google/uuid v1.6.0
+	github.com/gorilla/mux v1.8.1
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v5 v5.7.6
 	github.com/lib/pq v1.10.9
@@ -13,6 +14,7 @@ require (
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.40.0
+	go.uber.org/mock v0.6.0
 )
 
 require (
