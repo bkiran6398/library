@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/bkiran6398/library/internal/config"
+	"github.com/bkiran6398/library/internal/logger"
 )
 
 func main() {
@@ -12,5 +13,9 @@ func main() {
 		panic(fmt.Errorf("failed to load configuration: %w", err))
 	}
 
-	fmt.Println(configuration)
+	loggerInstance, err := logger.New(configuration.Log.Level)
+	if err != nil {
+		panic(fmt.Errorf("failed to create logger: %w", err))
+	}
+	loggerInstance.Info().Msg("starting library API")
 }
