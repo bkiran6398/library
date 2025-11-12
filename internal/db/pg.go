@@ -106,7 +106,7 @@ func runMigrations(ctx context.Context, connectionString string) error {
 	}
 	defer standardDB.Close()
 
-	if err := goose.UpContext(ctx, standardDB, "migrations"); err != nil {
+	if err := goose.UpContext(ctx, standardDB, "/Users/kiranb/go/src/github.com/bkiran6398/library/migrations"); err != nil {
 		return fmt.Errorf("run migrations: %w", err)
 	}
 

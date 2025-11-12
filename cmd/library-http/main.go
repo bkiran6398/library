@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/bkiran6398/library/internal/books/repository"
 	"github.com/bkiran6398/library/internal/config"
 	"github.com/bkiran6398/library/internal/db"
 	"github.com/bkiran6398/library/internal/logger"
@@ -27,6 +28,9 @@ func main() {
 		loggerInstance.Fatal().Err(err).Msg("failed to initialize database")
 	}
 	defer databasePool.Close()
+
+	pgRepository := repository.NewPgRepository(databasePool)
+	_ = pgRepository
 }
 
 // initializeDatabase connects to the database and runs migrations.
