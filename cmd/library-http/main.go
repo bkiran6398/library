@@ -4,7 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/bkiran6398/library/internal/books/repository"
+	bookRepository "github.com/bkiran6398/library/internal/books/repository"
+	bookService "github.com/bkiran6398/library/internal/books/service"
 	"github.com/bkiran6398/library/internal/config"
 	"github.com/bkiran6398/library/internal/db"
 	"github.com/bkiran6398/library/internal/logger"
@@ -29,8 +30,9 @@ func main() {
 	}
 	defer databasePool.Close()
 
-	pgRepository := repository.NewPgRepository(databasePool)
-	_ = pgRepository
+	bookRepo := bookRepository.NewPgRepository(databasePool)
+	bookSvc := bookService.NewService(bookRepo)
+	_ = bookSvc
 }
 
 // initializeDatabase connects to the database and runs migrations.
