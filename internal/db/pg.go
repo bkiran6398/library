@@ -2,11 +2,13 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/lib/pq"
+	"github.com/pressly/goose/v3"
 )
 
 type Pool = pgxpool.Pool
@@ -22,8 +24,8 @@ func buildConnectionString(host string, port int, user, password, databaseName, 
 	return fmt.Sprintf("postgresql://%s:%s@%s:%d/%s?sslmode=%s", user, password, host, port, databaseName, sslMode)
 }
 
-// Connect connects to Postgres using a pgxpool.
-func Connect(ctx context.Context, host string, port int, user, password, databaseName, sslMode string, maxConns, minConns int32) (*pgxpool.Pool, error) {
+// ConnectAndMigrate connects to Postgres using a pgxpool and runs embedded goose migrations.
+func ConnectAndMigrate(ctx context.Context, host string, port int, user, password, databaseName, sslMode string, maxConns, minConns int32) (*pgxpool.Pool, error) {
 	connectionString := buildConnectionString(host, port, user, password, databaseName, sslMode)
 
 	poolConfig, err := createPoolConfig(connectionString, maxConns, minConns)
@@ -37,6 +39,11 @@ func Connect(ctx context.Context, host string, port int, user, password, databas
 	}
 
 	if err := waitForDatabaseReady(ctx, databasePool); err != nil {
+		databasePool.Close()
+		return nil, err
+	}
+
+	if err := runMigrations(ctx, connectionString); err != nil {
 		databasePool.Close()
 		return nil, err
 	}
@@ -85,4 +92,23 @@ func waitForDatabaseReady(ctx context.Context, databasePool *pgxpool.Pool) error
 	}
 
 	return fmt.Errorf("database not ready after %d attempts: %w", maxRetryAttempts, lastError)
+}
+
+// runMigrations executes database migrations using goose.
+func runMigrations(ctx context.Context, connectionString string) error {
+	if err := goose.SetDialect("postgres"); err != nil {
+		return fmt.Errorf("set goose dialect: %w", err)
+	}
+
+	standardDB, err := sql.Open("postgres", connectionString)
+	if err != nil {
+		return fmt.Errorf("open standard database connection: %w", err)
+	}
+	defer standardDB.Close()
+
+	if err := goose.UpContext(ctx, standardDB, "migrations"); err != nil {
+		return fmt.Errorf("run migrations: %w", err)
+	}
+
+	return nil
 }

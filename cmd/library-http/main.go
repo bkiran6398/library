@@ -31,7 +31,7 @@ func main() {
 
 // initializeDatabase connects to the database and runs migrations.
 func initializeDatabase(ctx context.Context, loggerInstance zerolog.Logger, dbConfig config.DBConfig) (*db.Pool, error) {
-	databasePool, err := db.Connect(
+	databasePool, err := db.ConnectAndMigrate(
 		ctx,
 		dbConfig.Host,
 		dbConfig.Port,

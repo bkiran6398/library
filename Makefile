@@ -20,6 +20,20 @@ logs:
 docker-build:
 	docker build -t library-http:local .
 
+# create new db migration file
+migration-create:
+	@if [ -z "$(NAME)" ]; then \
+		echo "Error: NAME is required. Usage: make migration-create NAME=add_books_table"; \
+		exit 1; \
+	fi
+	@TIMESTAMP=$$(date +%Y%m%d%H%M%S); \
+	FILENAME="migrations/$${TIMESTAMP}_$(NAME).sql"; \
+	echo "-- +goose Up" > $$FILENAME; \
+	echo "" >> $$FILENAME; \
+	echo "-- +goose Down" >> $$FILENAME; \
+	echo "Created new migration file: $$FILENAME"
+
+
 
 
 

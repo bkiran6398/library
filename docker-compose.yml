@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   db:
     image: postgres:16-alpine
@@ -29,6 +28,8 @@ services:
       LIB_DB_PASSWORD: secret
       LIB_DB_NAME: library
       LIB_DB_SSLMODE: disable
+      LIB_DB_MAX_CONNS: 10
+      LIB_DB_MIN_CONNS: 1
       LIB_SERVER_PORT: 8080
     ports:
       - "8080:8080"

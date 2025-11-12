@@ -16,14 +16,14 @@ type DBConfig struct {
 	User     string
 	Password string
 	Name     string
-	SSLMode  string
-	MaxConns int32
-	MinConns int32
+	SSLMode  string `mapstructure:"sslmode"`
+	MaxConns int32  `mapstructure:"max_conns"`
+	MinConns int32  `mapstructure:"min_conns"`
 }
 
 type Config struct {
 	Log LogConfig
-	DB     DBConfig
+	DB  DBConfig
 }
 
 // Load loads configuration from config/config.yaml, allowing environment variables to override values.
